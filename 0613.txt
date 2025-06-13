@@ -13,7 +13,7 @@ export default function Board() {
   const [squres, setSqures] = useState(Array(9).fill(null));
   function onHandleClick(i) {
     const nextSquare = squres.slice();
-    if (squres[i]) {
+    if (squres[i] || calculateWinner[squres]) {
       return;
     }
     if (isxState) {
@@ -24,8 +24,16 @@ export default function Board() {
     setSqures(nextSquare);
     setisxState(!isxState);
   }
+  const winner = calculateWinner(squres);
+  let status;
+  if (winner) {
+    status = "winner:" + winner;
+  } else {
+    status = "Next player: " + (isxState ? "X" : "O");
+  }
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squres[0]} handleOnclick={() => onHandleClick(0)} />
         <Square value={squres[1]} handleOnclick={() => onHandleClick(1)} />
@@ -44,6 +52,32 @@ export default function Board() {
     </>
   );
 }
+function calculateWinner(squares) {
+  const line = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  {
+    /*定义完数组之后，判断赢没赢 */
+    for (let i = 0; i < line.length; i++) {
+      const [a, b, c] = line[i];
+      if (squares[a] && squares[a] == squares[b] && squares[a] == squares[c]) {
+        return squares[a];
+      }
+    }
+    /*定义完数组之后， */
+  }
+}
 {
   /*在 React 中，通常使用 onSomething 命名代表事件的 props，使用 handleSomething 命名处理这些事件的函数。 */
+}
+{
+  /*想判断井字棋的胜负情况，把所有情况写成数组的形式去判断 */
 }

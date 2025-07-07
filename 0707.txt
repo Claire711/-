@@ -1,0 +1,120 @@
+{
+  /* //导入的模块要用单引号*/
+}
+import { useState } from "react";
+function Square({ value, onClickState }) {
+  return (
+    <button className="square" onClick={onClickState}>
+      {/* //绑定点击事件要用大括号*/}
+      {value}
+    </button>
+  );
+}
+function Board({ isX, squares, onPlay }) {
+  {
+    /*//存储x状态 方块状态*/
+  }
+
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    {
+      /* //复制一个数组副本*/
+    }
+
+    const nextSquares = squares.slice();
+    if (isX) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    {
+      /*     //这是在传入参数，不是在赋值*/
+    }
+    onPlay(nextSquares);
+  }
+  const winner = calculateWinner(squares);
+  {
+    /*   //调用函数判断数组里面的元素是否合规*/
+  }
+
+  let status;
+  if (winner) {
+    status = "winner" + winner;
+  } else {
+    status = "next player:" + (isX ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onClickState={() => handleClick(0)} />
+        <Square value={squares[1]} onClickState={() => handleClick(1)} />
+        <Square value={squares[2]} onClickState={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onClickState={() => handleClick(3)} />
+        <Square value={squares[4]} onClickState={() => handleClick(4)} />
+        <Square value={squares[5]} onClickState={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onClickState={() => handleClick(6)} />
+        <Square value={squares[7]} onClickState={() => handleClick(7)} />
+        <Square value={squares[8]} onClickState={() => handleClick(8)} />
+      </div>
+    </>
+  );
+  {
+    /*   //括号后面跟分号*/
+  }
+}
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    /*   lines[i]：假设 lines 是一个二维数组（数组的数组），lines[i] 表示获取第 i 个子数组。
+解构过程：将 lines[i] 子数组中的元素按顺序赋值给变量 a、b、c。*/
+    if (squares[a] && squares[a] == squares[b] && squares[a] == squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+export default function Game() {
+  const [isX, setIsXState] = useState(true);
+  {
+    /*   //Array(9)后面跟着的是（），不是[]*/
+  }
+
+  const [history, sethistory] = useState([Array(9).fill(null)]);
+  {
+    /*history 被错误初始化为一个长度为 9 的空数组（而非数组的数组）：*/
+    /*const [history, sethistory] = useState(Array(9).fill(null));*/
+  }
+  const currentSquares = history[history.length - 1];
+  function handlePlay(nextSquares) {
+    sethistory([...history, nextSquares]);
+    setIsXState(!isX);
+  }
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board isX={isX} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*要做什么*/}</ol>
+      </div>
+    </div>
+  );
+}
